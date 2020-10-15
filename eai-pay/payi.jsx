@@ -8,10 +8,11 @@ import React, { useState, useEffect, useContext, createContext, Suspense } from 
   import "@babel/polyfill"
 
 
-
 // ------------------
 import usedata from "./usedata"
-
+import Head from "./head"
+import Pago from "./pago"
+import Order from "./order"
 
 
 
@@ -23,13 +24,12 @@ const StateContext = createContext();
 let server = "https://sushifactory.app"
 
 
-
 const useStateUniv = () => {
   return {
     Theme: useState(useContext(createContext(Theme))),
-    LoadingSecc1: useState(useContext(createContext(false))),
-    Empresa: useState(useContext(createContext(1))),
-
+    Loading: {
+      DataMain: useState(useContext(createContext(false))),
+    },
     User: {
       Id: useState(useContext(createContext(null))),
       Name: useState(useContext(createContext(""))),
@@ -37,6 +37,14 @@ const useStateUniv = () => {
       LoginPass: useState(useContext(createContext(""))),
       Info: useState(useContext(createContext({}))),
     },
+
+    Empresa: useState(useContext(createContext(1))),
+    Sucursal: useState(useContext(createContext({value: 6}))),
+    Pedido: useState(useContext(createContext(9999))),
+    PedidoData: useState(useContext(createContext({}))),
+    Servicio: useState(useContext(createContext(0))),
+
+    Indica: useState(useContext(createContext("Llena todos los datos"))),
 
   };
 }
@@ -51,41 +59,57 @@ const ContextProvider = ({ children }) => {
   );
 }
 
-// -----------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
+let useStatus = function(StateContextM) {
+
+  return {
+
+    head: function() {
+      return 1
+    },
+
+    pago: function() {
+      return 1
+    },
+
+  }
+}
+
+// --------------------------------------------------------------------------
 
 let useAcciones = function(StateContext) {
-  const [Empresa, setEmpresa] = useContext(StateContext).Empresa;
-
+  const useData = new usedata()
+  const [Empresa, setEmpresa] = useContext(StateContext).Empresa
+  const [PedidoData, setPedidoData] = useContext(StateContext).PedidoData
+  const [LoadingDataMain, setLoadingDataMain] = useContext(StateContext).Loading.DataMain
 
 
   // ---------------------
   
   return {
     Loader : async function (props) {
-      console.log("loader")
+      setLoadingDataMain(true)
+        let MiPedido = await useData.Pedidos().get({Codigo: props.id})
+        setPedidoData(MiPedido[0])
+      setLoadingDataMain(false)
+
     },
   }
 }
 
-
-
-
-
-
-
-
 // -----------------------------------------------------------------------------
+
 
 const Body = props => {
   const useacciones = new useAcciones(StateContext)
+  const usestatus = new useStatus(StateContext)
 
-  const [Loading, setLoading] = useContext(StateContext).LoadingSecc1
-  const [UserId, setUserId] = useContext(StateContext).User.Id;
+  // const [UserId, setUserId] = useContext(StateContext).User.Id;
 
 
 // ------------
-    // useEffect(() => {useacciones.Loader(props) }, [])
+    useEffect(() => {useacciones.Loader(props) }, [])
     // useEffect(() => {useacciones.getCliente(UserId) }, [UserId])
 
 // ------------
@@ -94,17 +118,38 @@ const Body = props => {
     return (
 
       <Flex bg="WhiteSmoke" sx={{width: "100%" }}>
-        {Loading ? <Spinner size={17} ml={3} /> : 
           <Flex sx={{width: "100%" }}>
             <Box sx={{ width: "100%" }}>
 
               <main>
-                Body
+                <Head 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+                
+                <Box css={{ height: 13 }} />
+
+                <Order 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+                
+                <Box css={{ height: 13 }} />
+
+
+                <Pago 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+
               </main>
 
             </Box>
           </Flex>
-        }
+        
       </Flex>
 
     )
@@ -115,8 +160,6 @@ const Body = props => {
 }
 
 // -----------------------------------------------------------------------------
-
-
 
 
 // -----------------------------------------------------------------------------
@@ -135,11 +178,10 @@ export default (App = props => {
             //minHeight: '100vh',
             justifyContent: 'center'
           }}
-          css={{ maxWidth: "768px", minWidth: "410px" }}
+          css={{ maxWidth: "768px", minWidth: "375px" }}
         >
           <header sx={{width: "100%"}}>
-            {/* <Headi {...props} />
-            <MenuHeader2 {...props} /> */}
+
           </header>
 
           <main sx={{width: "100%"}}>
@@ -154,3 +196,5 @@ export default (App = props => {
 });
 
 // ----------------------------------------------------------------------------
+
+

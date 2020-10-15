@@ -6,7 +6,9 @@ import App from "../eai-pay/payi";
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App 
+      id={6972963}
+    />
   </React.StrictMode>,
   rootElement
 );
