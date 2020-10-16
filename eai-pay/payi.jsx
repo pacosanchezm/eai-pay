@@ -11,9 +11,10 @@ import React, { useState, useEffect, useContext, createContext, Suspense } from 
 // ------------------
 import usedata from "./usedata"
 import Head from "./head"
-import Pago from "./pago"
 import Order from "./order"
-
+import Cuenta from "./cuenta"
+import Servicio from "./servicio"
+import Pago from "./pago"
 
 
 let App;
@@ -24,12 +25,28 @@ const StateContext = createContext();
 let server = "https://sushifactory.app"
 
 
+
+
 const useStateUniv = () => {
   return {
     Theme: useState(useContext(createContext(Theme))),
     Loading: {
       DataMain: useState(useContext(createContext(false))),
     },
+
+    Extend: {
+      Order: useState(useContext(createContext(true))),
+      Cuenta: useState(useContext(createContext(false))),
+      Servicio: useState(useContext(createContext(false))),
+      Pago: useState(useContext(createContext(false))),
+      Deliver: useState(useContext(createContext(false))),
+    },
+
+
+
+
+
+
     User: {
       Id: useState(useContext(createContext(null))),
       Name: useState(useContext(createContext(""))),
@@ -66,6 +83,14 @@ let useStatus = function(StateContextM) {
   return {
 
     head: function() {
+      return 1
+    },
+
+    order: function() {
+      return 1
+    },
+
+    servicio: function() {
       return 1
     },
 
@@ -128,7 +153,7 @@ const Body = props => {
                   useStatus = {usestatus}
                 />
                 
-                <Box css={{ height: 13 }} />
+                <Box css={{ height: "1px" }} />
 
                 <Order 
                   useContext={useContext(StateContext)}
@@ -136,7 +161,25 @@ const Body = props => {
                   useStatus = {usestatus}
                 />
                 
-                <Box css={{ height: 13 }} />
+                <Box css={{ height: 5 }} />
+
+                <Cuenta 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+                
+                <Box css={{ height: 5 }} />
+
+
+
+                <Servicio 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+                
+                <Box css={{ height: 5 }} />
 
 
                 <Pago 
@@ -181,7 +224,6 @@ export default (App = props => {
           css={{ maxWidth: "768px", minWidth: "375px" }}
         >
           <header sx={{width: "100%"}}>
-
           </header>
 
           <main sx={{width: "100%"}}>
@@ -196,5 +238,4 @@ export default (App = props => {
 });
 
 // ----------------------------------------------------------------------------
-
 

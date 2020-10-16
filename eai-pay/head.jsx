@@ -11,6 +11,14 @@ const StateContext = createContext()
 
 // ------------------------------------------------------------------
 
+let Images = {
+  logo1: {src: "https://smxai.net/sf/sflogo1.jpg"},
+  logo2: {src: "https://smxai.net/sf/cs1/sflogo2.jpg"},
+};
+
+
+
+
 const useStateLocal = () => {
   return {
     Theme: useState(useContext(createContext(Theme))),
@@ -43,25 +51,17 @@ const ModuloSimple  = () => {
   return (
     <div>
       <Flex sx={{ width: "100%" }}>
-        <Box
-          //bg="primary"
-          sx={{
-            fontWeight: "normal",
-            fontSize: 1,
-            color: "text",
-            fontFamily: "body",
-            width: "100%"
-          }}
-        >
+        <Box sx={{ width: "30%" }}>
+          <Image sx={{ height: "34px" }} src={Images.logo2.src} />
+        </Box>
 
-          <Flex sx={{ width: "100%" }}>
-            <Box sx={{ width: "100%" }}>
-              <Text sx={Estilo.d1}>{PedidoData.Nombre}</Text>
-            </Box>
-          </Flex>
-
-          <Box css={{ height: 21 }} />
-
+        <Box sx={{ width: "70%" }}>
+          <Box sx={{ width: "100%" }}>
+            <Text sx={Estilo.d1}>{PedidoData.SucursalDesc}</Text>
+          </Box>
+          <Box sx={{ width: "100%" }}>
+            <Text sx={Estilo.d1}>¡Hola {PedidoData.Nombre}!</Text>
+          </Box>
         </Box>
       </Flex>
     </div>
@@ -73,14 +73,12 @@ const ModuloSimple  = () => {
   try {
 
     return (
-      <Grid sx={{p:2, m: 2, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
-
+      <Grid sx={{p:2, m: 2}}>
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
             {(props.useStatus.head()===1) ? ModuloSimple() : <div/>}
           </div>
         }
-
       </Grid>
     )
     

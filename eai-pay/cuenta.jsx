@@ -36,13 +36,15 @@ const ContextProvider = ({ children }) => {
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
-  const [Extend, setExtend] = props.useContext.Extend.Order
-
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
+
+  const [Extended, setExtended] = useContext(StateContext).Extended;
+
 
 // ----------------------------------
 
 const ModuloSimple  = () => {
+
   return (
     <div>
       <Flex sx={{ width: "100%" }}>
@@ -57,45 +59,28 @@ const ModuloSimple  = () => {
           }}
         >
 
+
+
+
+
+
           <Flex sx={{ width: "100%" }}>
             <Box sx={{ width: "100%" }}>
-              <Text sx={Estilo.d1}>{PedidoData.Id}</Text>
-              <Text sx={Estilo.d1}>{PedidoData.Cuenta}</Text>
+              <Text sx={Estilo.d1}>{PedidoData.ConsumosCuenta}</Text>
+              <Text sx={Estilo.d1}>{PedidoData.ConsumosMonto}</Text>
+
 
             </Box>
           </Flex>
 
           <Box css={{ height: 21 }} />
 
-        </Box>
-      </Flex>
-    </div>
-  )
-}
 
-// ----------------------------------
 
-const ModuloSlim  = () => {
-  return (
-    <div>
-      <Flex sx={{ width: "100%" }}>
-        <Box
-          //bg="primary"
-          sx={{
-            fontWeight: "normal",
-            fontSize: 1,
-            color: "text",
-            fontFamily: "body",
-            width: "100%"
-          }}
-        >
 
-          <Flex sx={{ width: "100%" }}>
-            <Box sx={{ width: "100%" }}>
-              <Text sx={Estilo.d1}>{PedidoData.Id} - {PedidoData.Cuenta}</Text>
 
-            </Box>
-          </Flex>
+
+
 
 
         </Box>
@@ -105,9 +90,6 @@ const ModuloSlim  = () => {
 }
 
 // ----------------------------------
-
-
-
 
   try {
 
@@ -116,8 +98,7 @@ const ModuloSlim  = () => {
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
-            {(props.useStatus.order()===1 & Extend) ? ModuloSimple() : <div/>}
-            {(props.useStatus.order()===1 & !Extend) ? ModuloSlim() : <div/>}
+            {(props.useStatus.servicio()===1) ? ModuloSimple() : <div/>}
           </div>
         }
 
