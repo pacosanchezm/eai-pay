@@ -15,6 +15,8 @@ import Order from "./order"
 import Cuenta from "./cuenta"
 import Servicio from "./servicio"
 import Pago from "./pago"
+import Deliver from "./deliver"
+
 
 
 let App;
@@ -37,15 +39,20 @@ const useStateUniv = () => {
     Extend: {
       Order: useState(useContext(createContext(true))),
       Cuenta: useState(useContext(createContext(false))),
-      Servicio: useState(useContext(createContext(false))),
-      Pago: useState(useContext(createContext(false))),
+      Servicio: useState(useContext(createContext(true))),
+      Pago: useState(useContext(createContext(true))),
       Deliver: useState(useContext(createContext(false))),
     },
 
+    Images: {
+      Logo1: useState(useContext(createContext({src: "https://smxai.net/sf/sflogo1.jpg"}))),
+      Logo2: useState(useContext(createContext({src: "https://smxai.net/sf/sflogo2.jpg"}))),
+      Flechad: useState(useContext(createContext({src: "https://smxai.net/sf/cs1/arrowd1.png"}))),
+      Flechau: useState(useContext(createContext({src: "https://smxai.net/sf/cs1/arrowu1.png"}))),
+    },
+    
 
-
-
-
+    
 
     User: {
       Id: useState(useContext(createContext(null))),
@@ -90,6 +97,11 @@ let useStatus = function(StateContextM) {
       return 1
     },
 
+    cuenta: function() {
+      return 1
+    },
+
+
     servicio: function() {
       return 1
     },
@@ -98,6 +110,9 @@ let useStatus = function(StateContextM) {
       return 1
     },
 
+    deliver: function() {
+      return 1
+    },
   }
 }
 
@@ -118,7 +133,19 @@ let useAcciones = function(StateContext) {
         let MiPedido = await useData.Pedidos().get({Codigo: props.id})
         setPedidoData(MiPedido[0])
       setLoadingDataMain(false)
-
+    },
+    
+    useChange : (Field, setField) => {
+      return {
+        name: Field,
+        value: Field,
+        fontSize: 1,
+        color: "#595959",
+        bg: "#DCDCDC",
+        onChange: e => {
+          setField(e.target.value);
+        }
+      }
     },
   }
 }
@@ -187,6 +214,14 @@ const Body = props => {
                   useAcciones = {useacciones}
                   useStatus = {usestatus}
                 />
+
+                <Deliver 
+                  useContext={useContext(StateContext)}
+                  useAcciones = {useacciones}
+                  useStatus = {usestatus}
+                />
+
+
 
               </main>
 

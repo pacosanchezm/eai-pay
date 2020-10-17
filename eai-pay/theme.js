@@ -355,6 +355,15 @@ export default {
     },
 
 
+    d1sb: {
+      fontSize: 1,
+      fontFamily: "body",
+      fontWeight: "bold",
+      color: "#696969",
+      mt: 1,
+      mb: 0,
+      ml:3,
+    },
 
 
 

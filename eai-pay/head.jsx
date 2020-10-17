@@ -11,14 +11,6 @@ const StateContext = createContext()
 
 // ------------------------------------------------------------------
 
-let Images = {
-  logo1: {src: "https://smxai.net/sf/sflogo1.jpg"},
-  logo2: {src: "https://smxai.net/sf/cs1/sflogo2.jpg"},
-};
-
-
-
-
 const useStateLocal = () => {
   return {
     Theme: useState(useContext(createContext(Theme))),
@@ -43,6 +35,7 @@ const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
+  const Images = props.useContext.Images
 
 // ----------------------------------
 
@@ -52,7 +45,7 @@ const ModuloSimple  = () => {
     <div>
       <Flex sx={{ width: "100%" }}>
         <Box sx={{ width: "30%" }}>
-          <Image sx={{ height: "34px" }} src={Images.logo2.src} />
+          <Image sx={{ height: "34px" }} src={Images.Logo1[0].src} />
         </Box>
 
         <Box sx={{ width: "70%" }}>

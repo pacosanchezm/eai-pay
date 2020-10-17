@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext, createContext, Suspense } from "react"
-import moment from "moment";
-
 
 /** @jsx jsx */
 import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
 import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/components";
 import Theme from "./theme"
-
 
 let App
 const StateContext = createContext()
@@ -35,18 +32,19 @@ const ContextProvider = ({ children }) => {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
+
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
-  const [Extend, setExtend] = props.useContext.Extend.Order
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
+
+  const [Extend, setExtend] = props.useContext.Extend.Deliver
   const Images = props.useContext.Images
 
 
 // ----------------------------------
 
 const ModuloSlim  = () => {
-
   return (
     <div>
       <Flex sx={{ width: "100%" }}>
@@ -63,8 +61,7 @@ const ModuloSlim  = () => {
 
           <Flex sx={{ width: "100%", height: "21px" }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Tu Pedido:  
-                {PedidoData.Cuenta} - {PedidoData.Id}
+              <Text sx={Estilo.d1sb}>Entrega:  
               </Text>
             </Box>
 
@@ -75,7 +72,7 @@ const ModuloSlim  = () => {
                   setExtend(true)
                 }}
               >
-                <Image src={Images.Flechad[0].src} />
+                <Image  src={Images.Flechad[0].src} />
               </Button>
             </Box>
           </Flex>
@@ -89,8 +86,15 @@ const ModuloSlim  = () => {
 // ----------------------------------
 
 
+
+
+
+
+
+
+
 const ModuloSimple  = () => {
-  console.log({Images})
+
   return (
     <div>
       <Flex sx={{ width: "100%" }}>
@@ -107,7 +111,7 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", height: "21px" }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Tu Pedido: </Text>
+              <Text sx={Estilo.d1sb}>Entrega: </Text>
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>
@@ -123,32 +127,23 @@ const ModuloSimple  = () => {
           </Flex>
 
 
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Folio: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{PedidoData.Cuenta} - {PedidoData.Id}</Text>
+
+          <Flex sx={{ width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
+              <Text sx={Estilo.d1}>{PedidoData.ConsumosCuenta}</Text>
+              <Text sx={Estilo.d1}>{PedidoData.ConsumosMonto}</Text>
+
+
             </Box>
           </Flex>
 
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Fecha: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{moment(PedidoData.Fecha).format("DD MMM HH:MM")}</Text>
-            </Box>
-          </Flex>
 
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Notas: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{PedidoData.Obv}</Text>
-            </Box>
-          </Flex>
+
+
+
+
+
+
 
 
         </Box>
@@ -159,11 +154,6 @@ const ModuloSimple  = () => {
 
 // ----------------------------------
 
-
-
-
-
-
   try {
 
     return (
@@ -171,8 +161,9 @@ const ModuloSimple  = () => {
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
-            {(props.useStatus.order()===1 & Extend) ? ModuloSimple() : <div/>}
-            {(props.useStatus.order()===1 & !Extend) ? ModuloSlim() : <div/>}
+            {(props.useStatus.deliver()===1 & Extend) ? ModuloSimple() : <div/>}
+            {(props.useStatus.deliver()===1 & !Extend) ? ModuloSlim() : <div/>}
+
           </div>
         }
 
