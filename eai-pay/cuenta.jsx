@@ -5,6 +5,10 @@ import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
 import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/components";
 import Theme from "./theme"
 
+import Regs from "./regs"
+
+
+
 let App
 const StateContext = createContext()
 
@@ -15,7 +19,6 @@ const useStateLocal = () => {
     Theme: useState(useContext(createContext(Theme))),
     LoadingSecc1: useState(useContext(createContext(false))),
     Extended: useState(useContext(createContext(false))),
-
   };
 };
 
@@ -35,6 +38,8 @@ const ContextProvider = ({ children }) => {
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
+  const [LoadingRegistros, setLoadingRegistros] = props.useContext.Loading.Registros
+
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
 
   const [Extend, setExtend] = props.useContext.Extend.Cuenta
@@ -58,7 +63,7 @@ const ModuloSlim  = () => {
           }}
         >
 
-          <Flex sx={{ width: "100%", height: "21px" }}>
+          <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
               <Text sx={Estilo.d1sb}>Tu Cuenta:  
                 {PedidoData.ConsumosCuenta} Artículos - $ {PedidoData.ConsumosMonto}
@@ -66,14 +71,15 @@ const ModuloSlim  = () => {
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>
-              {/* <Button
+              <Button
                 sx={{width : "100%", p:0, bg: "transparent"}}
                 onClick={() => {
+                  setLoadingRegistros(true)
                   setExtend(true)
                 }}
               >
                 <Image  src={Images.Flechad[0].src} />
-              </Button> */}
+              </Button>
             </Box>
           </Flex>
 
@@ -84,6 +90,7 @@ const ModuloSlim  = () => {
 }
 
 // ----------------------------------
+
 
 
 
@@ -109,8 +116,8 @@ const ModuloSimple  = () => {
           }}
         >
 
-          <Flex sx={{ width: "100%", height: "21px" }}>
-            <Box sx={{ width: "90%" }}>
+          <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
+            <Box sx={{ width: "90%", mb:2 }}>
               <Text sx={Estilo.d1sb}>Tu Cuenta: </Text>
             </Box>
 
@@ -128,16 +135,13 @@ const ModuloSimple  = () => {
 
 
 
-          <Flex sx={{ width: "100%" }}>
+          <Flex sx={{ width: "100%", pl: 3 }}>
             <Box sx={{ width: "100%" }}>
-              <Text sx={Estilo.d1}>{PedidoData.ConsumosCuenta}</Text>
-              <Text sx={Estilo.d1}>{PedidoData.ConsumosMonto}</Text>
-
-
+              <Regs {...props}/> 
             </Box>
           </Flex>
 
-          <Box css={{ height: 21 }} />
+          <Box css={{ height: 3 }} />
 
 
 
@@ -158,7 +162,7 @@ const ModuloSimple  = () => {
   try {
 
     return (
-      <Grid sx={{p:2, m: 2, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
+      <Grid sx={{p:0, m: 0, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>

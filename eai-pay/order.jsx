@@ -61,7 +61,7 @@ const ModuloSlim  = () => {
           }}
         >
 
-          <Flex sx={{ width: "100%", height: "21px" }}>
+          <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
               <Text sx={Estilo.d1sb}>Tu Pedido:  
                 {PedidoData.Cuenta} - {PedidoData.Id}
@@ -90,7 +90,7 @@ const ModuloSlim  = () => {
 
 
 const ModuloSimple  = () => {
-  console.log({Images})
+ // console.log({Images})
   return (
     <div>
       <Flex sx={{ width: "100%" }}>
@@ -105,8 +105,8 @@ const ModuloSimple  = () => {
           }}
         >
 
-          <Flex sx={{ width: "100%", height: "21px" }}>
-            <Box sx={{ width: "90%" }}>
+          <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
+            <Box sx={{ width: "90%", mb:2 }}>
               <Text sx={Estilo.d1sb}>Tu Pedido: </Text>
             </Box>
 
@@ -167,7 +167,7 @@ const ModuloSimple  = () => {
   try {
 
     return (
-      <Grid sx={{p:2, m: 2, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
+      <Grid sx={{p:0, m: 0, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>

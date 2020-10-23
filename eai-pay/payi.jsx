@@ -7,6 +7,9 @@ import React, { useState, useEffect, useContext, createContext, Suspense } from 
   import Theme from "./theme"
   import "@babel/polyfill"
 
+  import Pusher from 'pusher-js'
+
+
 
 // ------------------
 import usedata from "./usedata"
@@ -26,6 +29,9 @@ const StateContext = createContext();
 
 let server = "https://sushifactory.app"
 
+var pusher = new Pusher('bef17b566c9f80236bf8', {
+  cluster: 'us2'
+});
 
 
 
@@ -34,14 +40,16 @@ const useStateUniv = () => {
     Theme: useState(useContext(createContext(Theme))),
     Loading: {
       DataMain: useState(useContext(createContext(false))),
+      Registros: useState(useContext(createContext(false))),
+
     },
 
     Extend: {
       Order: useState(useContext(createContext(true))),
       Cuenta: useState(useContext(createContext(false))),
       Servicio: useState(useContext(createContext(true))),
-      Pago: useState(useContext(createContext(true))),
-      Deliver: useState(useContext(createContext(false))),
+      Pago: useState(useContext(createContext(false))),
+      Deliver: useState(useContext(createContext(true))),
     },
 
     Images: {
@@ -66,9 +74,26 @@ const useStateUniv = () => {
     Sucursal: useState(useContext(createContext({value: 6}))),
     Pedido: useState(useContext(createContext(9999))),
     PedidoData: useState(useContext(createContext({}))),
-    Servicio: useState(useContext(createContext(0))),
+    Registros: useState(useContext(createContext([]))),
 
+
+    Servicio: useState(useContext(createContext(0))),
     Indica: useState(useContext(createContext("Llena todos los datos"))),
+
+    Location: {
+      Share: useState(useContext(createContext(false))),
+      Proceso: useState(useContext(createContext(0))),
+
+      Marca: useState(useContext(createContext(""))),
+      Color: useState(useContext(createContext("Otro"))),
+      Obv: useState(useContext(createContext(""))),
+    },
+
+
+
+    
+
+
 
   };
 }
@@ -122,7 +147,18 @@ let useAcciones = function(StateContext) {
   const useData = new usedata()
   const [Empresa, setEmpresa] = useContext(StateContext).Empresa
   const [PedidoData, setPedidoData] = useContext(StateContext).PedidoData
+  const [Registros, setRegistros] = useContext(StateContext).Registros
+
   const [LoadingDataMain, setLoadingDataMain] = useContext(StateContext).Loading.DataMain
+  const [LoadingRegistros, setLoadingRegistros] = useContext(StateContext).Loading.Registros
+
+
+  const [Share, setShare] = useContext(StateContext).Location.Share
+  const [Marca, setMarca] = useContext(StateContext).Location.Marca
+  const [Color, setColor] = useContext(StateContext).Location.Color
+  const [LocObv, setLocObv] = useContext(StateContext).Location.Obv
+
+
 
 
   // ---------------------
@@ -135,6 +171,15 @@ let useAcciones = function(StateContext) {
       setLoadingDataMain(false)
     },
     
+
+    LoaderCuenta : async function (props) {
+      setLoadingRegistros(true)
+        let MisRegistros = await useData.Consumos().get2(PedidoData.Id)
+        setRegistros(MisRegistros)
+      setLoadingRegistros(false)
+    },
+
+
     useChange : (Field, setField) => {
       return {
         name: Field,
@@ -147,6 +192,61 @@ let useAcciones = function(StateContext) {
         }
       }
     },
+
+    
+
+    addPosition : async () => {
+
+      const defaultSettings = {
+        Active: true,
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+  
+      const showPosition = async (position) => {
+        let add = await useData.Location().insert({
+          Pedido: PedidoData.Id,
+          LocLat: position.coords.latitude,
+          LocLong: position.coords.longitude,
+          Accuracy: position.coords.accuracy,
+          Marca: Marca,
+          Color: Color,
+          Obv: LocObv
+          //Fecha: timestamp
+        }) 
+  
+        return add
+      }
+  
+      const onError = error => { console.log(error)}// setError(error.message)}
+  
+
+      console.log({Share})
+
+      if(Share){
+        let geo = await navigator.geolocation.getCurrentPosition(showPosition, onError, defaultSettings)
+  
+        let upProceso = await useData.Pedidos().upProceso({
+          Id: PedidoData.Id,
+          Proceso: "RutaTogo",
+        }) 
+      }
+  
+      return 1
+    },
+
+    upProceso : async (e) => {
+      let upProceso = await useData.Pedidos().upProceso({
+        Id: PedidoData.Id,
+        Proceso: e.Proceso,
+        ProcesoObv: e.ProcesoObv,
+      }) 
+
+      return upProceso
+    },
+
+
   }
 }
 
@@ -156,13 +256,41 @@ let useAcciones = function(StateContext) {
 const Body = props => {
   const useacciones = new useAcciones(StateContext)
   const usestatus = new useStatus(StateContext)
+  const [PedidoData, setPedidoData] = useContext(StateContext).PedidoData
+  const [Share, setShare] = useContext(StateContext).Location.Share
+
+  const [ExtendCuenta, setExtendCuenta] = useContext(StateContext).Extend.Cuenta
 
   // const [UserId, setUserId] = useContext(StateContext).User.Id;
 
 
+  var channel = pusher.subscribe('csradar');
+
+
+
 // ------------
-    useEffect(() => {useacciones.Loader(props) }, [])
-    // useEffect(() => {useacciones.getCliente(UserId) }, [UserId])
+    useEffect(() => {
+      useacciones.Loader(props)
+      channel.bind('report', useacciones.addPosition, {Pedido:PedidoData.Id})
+    }, [])
+
+    useEffect(() => {
+      if(ExtendCuenta){useacciones.LoaderCuenta()}
+    }, [ExtendCuenta]);
+
+
+
+
+    useEffect(() => {
+      channel.unbind('report');
+      channel.bind('report', useacciones.addPosition, {Pedido:PedidoData.Id})
+    }, [PedidoData.Id]);
+
+    useEffect(() => {
+      channel.unbind('report');
+      channel.bind('report', useacciones.addPosition, {Pedido:PedidoData.Id})
+    }, [Share]);
+
 
 // ------------
   try {
@@ -214,6 +342,9 @@ const Body = props => {
                   useAcciones = {useacciones}
                   useStatus = {usestatus}
                 />
+
+                <Box css={{ height: 5 }} />
+
 
                 <Deliver 
                   useContext={useContext(StateContext)}
@@ -273,4 +404,5 @@ export default (App = props => {
 });
 
 // ----------------------------------------------------------------------------
+
 
