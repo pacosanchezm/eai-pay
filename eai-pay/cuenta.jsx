@@ -7,8 +7,6 @@ import Theme from "./theme"
 
 import Regs from "./regs"
 
-
-
 let App
 const StateContext = createContext()
 
@@ -65,7 +63,7 @@ const ModuloSlim  = () => {
 
           <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Tu Cuenta:  
+              <Text sx={Estilo.d1sb}>Tu Orden:  
                 {PedidoData.ConsumosCuenta} Artículos - $ {PedidoData.ConsumosMonto}
               </Text>
             </Box>
@@ -92,14 +90,6 @@ const ModuloSlim  = () => {
 // ----------------------------------
 
 
-
-
-
-
-
-
-
-
 const ModuloSimple  = () => {
 
   return (
@@ -118,7 +108,7 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%", mb:2 }}>
-              <Text sx={Estilo.d1sb}>Tu Cuenta: </Text>
+              <Text sx={Estilo.d1sb}>Tu Orden: </Text>
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>
@@ -134,7 +124,6 @@ const ModuloSimple  = () => {
           </Flex>
 
 
-
           <Flex sx={{ width: "100%", pl: 3 }}>
             <Box sx={{ width: "100%" }}>
               <Regs {...props}/> 
@@ -142,14 +131,6 @@ const ModuloSimple  = () => {
           </Flex>
 
           <Box css={{ height: 3 }} />
-
-
-
-
-
-
-
-
 
         </Box>
       </Flex>
@@ -187,7 +168,9 @@ export default (App = props => {
   return (
     <div>
       <ContextProvider>
-        <Flex>
+        <Flex
+          css={{ maxWidth: "768px", minWidth: "400px" }}
+        >
           <main sx={{width: "100%"}}>
             <Body {...props} />
           </main>

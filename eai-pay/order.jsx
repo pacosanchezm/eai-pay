@@ -106,7 +106,7 @@ const ModuloSimple  = () => {
         >
 
           <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
-            <Box sx={{ width: "90%", mb:2 }}>
+            <Box sx={{ width: "90%" }}>
               <Text sx={Estilo.d1sb}>Tu Pedido: </Text>
             </Box>
 
@@ -121,6 +121,11 @@ const ModuloSimple  = () => {
               </Button>
             </Box>
           </Flex>
+
+
+          <Flex sx={{ width: "100%", pl: 3, pr:3 }}>
+            <Box sx={{ width: "100%" }}>
+
 
 
           <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
@@ -149,6 +154,9 @@ const ModuloSimple  = () => {
               <Text sx={Estilo.d1s}>{PedidoData.Obv}</Text>
             </Box>
           </Flex>
+
+          </Box>
+        </Flex>
 
 
         </Box>
@@ -191,7 +199,9 @@ export default (App = props => {
   return (
     <div>
       <ContextProvider>
-        <Flex>
+        <Flex
+
+        >
           <main sx={{width: "100%"}}>
             <Body {...props} />
           </main>

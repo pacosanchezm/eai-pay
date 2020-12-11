@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext, createContext, Suspense } from "react"
 
+
+
+
 /** @jsx jsx */
 import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
 import { Flex, Box, Button, Text, Textarea, Image, Spinner, Grid, Input } from "@theme-ui/components";
@@ -7,6 +10,10 @@ import Theme from "./theme"
 
 import Dropbox from "react-select"
 import DropboxCss from "./select"
+
+import ReactTooltip from "react-tooltip";
+
+var { renderToString, renderToStaticMarkup } = require("react-dom/server");
 
 
 let App
@@ -33,6 +40,7 @@ const useStateLocal = () => {
     Theme: useState(useContext(createContext(Theme))),
     LoadingSecc1: useState(useContext(createContext(false))),
     Extended: useState(useContext(createContext(false))),
+    MarcaLocal: useState(useContext(createContext(""))),
 
   };
 };
@@ -59,15 +67,63 @@ const Body = props => {
   const [Extend, setExtend] = props.useContext.Extend.Deliver
   const Images = props.useContext.Images
 
-  const [Marca, setMarca] = props.useContext.Location.Marca
+  const [Marca, setMarca] = props.marca
   const [Color, setColor] = props.useContext.Location.Color
   const [Obv, setObv] = props.useContext.Location.Obv
   const [Share, setShare] = props.useContext.Location.Share
   const [LocationProceso, setLocationProceso] = props.useContext.Location.Proceso
+  const [MarcaLocal, setMarcaLocal] = useContext(StateContext).MarcaLocal
 
 
 
+const Tooltip1  = () => {
 
+  return (
+    <div 
+    css={{ maxWidth: "350px", minWidth: "200px" }}
+    >
+      <Flex sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }}>
+        <Text sx={{color: "white", fontSize:2}}>Compartir Ubicación: </Text>
+        </Box>
+      </Flex>
+
+      <Flex sx={{ width: "100%" }}>
+      <Box sx={{ width: "5%" }}/>
+        <Box sx={{ width: "90%" }}>
+          <Text sx={{color: "white", fontSize:1}}>
+            Selecciona "Compartir Ubicación" y después autoriza compartir tu ubicacaión para que podamos saber cuando vas llegando por tu pedido.
+          </Text>
+        </Box>
+      </Flex>
+
+
+      <Flex sx={{ width: "100%" }}>
+      <Box sx={{ width: "5%" }}/>
+        <Box sx={{ width: "90%" }}>
+          <Text sx={{color: "white", fontSize:1}}>
+            Mantén lo más posible esta pantalla activa en tu teléfono para poder tomar tu ubicación.
+          </Text>
+        </Box>
+      </Flex>
+
+      <Flex sx={{ width: "100%" }}>
+      <Box sx={{ width: "5%" }}/>
+        <Box sx={{ width: "90%" }}>
+          <Text sx={{color: "white", fontSize:1}}>
+            Solo recibiremos tu ubicación mientras tengas esta pantalla abierta y el botón activado. Una vez que cierres esta ventana no recibiremos tu ubicación.
+          </Text>
+        </Box>
+      </Flex>
+
+    </div>
+
+
+
+  )
+}
+
+// --------------------
 
 
 
@@ -113,10 +169,6 @@ const ModuloSlim  = () => {
 }
 
 // ----------------------------------
-
-
-
-
 
 
 
@@ -213,9 +265,30 @@ const ModuloSimple  = () => {
           </Flex>
 
           <Flex sx={{ width: "100%" }}>
-            <Box sx={{ width: "100%", mr:2 }}>
+            <Box sx={{ width: "50%", mr:2 }}>
               <Text sx={Estilo.h2}>Comparte tu ubicación</Text>
             </Box>
+
+            <Box sx={{ width: "10%", mr:2 }}>
+
+              <Image  src={Images.Ayuda[0].src}
+                data-tip={renderToStaticMarkup(Tooltip1())}
+                data-for='Tooltip1' 
+                width='25' height='25'
+                data-html={true}
+                pt={3}
+              />
+
+              <ReactTooltip
+                id='Tooltip1'
+                place="top"
+                type="info"
+                effect="solid"
+                html={true}
+              />
+            </Box>
+
+
 
             <Box sx={{ width: "50%", mr:2 }}>
 
@@ -246,8 +319,6 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", bg: Color }}>
 
-
-
             <Button
               sx={{ height: "34px", mb: 3, width: "100%" }}
               bg={LocationProceso===1 ? "green":"gray"}
@@ -258,6 +329,8 @@ const ModuloSimple  = () => {
                   Proceso: "RutaTogo",
                   ProcesoObv: "El cliente marcó que está en camino"
                 })
+
+
               }}
             >
               Voy en Camino
@@ -296,9 +369,6 @@ const ModuloSimple  = () => {
             >
               Estoy esperando
             </Button>
-
-
-
 
           </Flex>
 

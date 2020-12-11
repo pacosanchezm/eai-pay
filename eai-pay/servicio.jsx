@@ -69,6 +69,30 @@ const Body = props => {
 
 // ----------------------------------
 
+const ModuloCero  = () => {
+
+  return (
+    <Flex sx={{ width: "100%" }}>
+      <Box
+        //bg="primary"
+        sx={{
+          fontWeight: "normal",
+          fontSize: 1,
+          color: "text",
+          fontFamily: "body",
+          width: "100%"
+        }}
+      >
+
+      </Box>
+    </Flex>
+  )
+}
+
+
+
+
+
 // ----------------------------------
 
 const ModuloSlim  = () => {
@@ -306,6 +330,7 @@ const ModuloSimple  = () => {
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
+            {(props.useStatus.servicio()===0) ? ModuloCero() : <div/>}
             {(props.useStatus.servicio()===1 & Extend) ? ModuloSimple() : <div/>}
             {(props.useStatus.servicio()===1 & !Extend) ? ModuloSlim() : <div/>}
 

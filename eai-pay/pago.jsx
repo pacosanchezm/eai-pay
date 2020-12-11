@@ -35,13 +35,17 @@ const ContextProvider = ({ children }) => {
 
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
-  const [Loading, setLoading] = props.useContext.Loading.DataMain
-  const [PedidoData, setPedidoData] = props.useContext.PedidoData
-  const [Extend, setExtend] = props.useContext.Extend.Pago
-  const Images = props.useContext.Images
 
+  const [Loading, setLoading] = props.useContext.Loading
+  const [PedidoData, setPedidoData] = props.useContext.PedidoData
+  const [Extend, setExtend] = props.useContext.Extend
+  const Images = props.useContext.Images
   const [Servicio, setServicio] = props.useContext.Servicio
   const Cuenta = PedidoData.ConsumosMonto
+
+
+  const Token = props.useStatus.token()
+
 
 
 // ----------------------------------
@@ -90,7 +94,48 @@ const ModuloSlim  = () => {
 }
 
 // ----------------------------------
+const ModuloSlimPagado  = () => {
+  return (
+    <div>
+      <Flex sx={{ width: "100%" }}>
+        <Box
+          //bg="primary"
+          sx={{
+            fontWeight: "normal",
+            fontSize: 1,
+            color: "text",
+            fontFamily: "body",
+            width: "100%"
+          }}
+        >
 
+          <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
+            <Box sx={{ width: "90%" }}>
+
+              <Text sx={Estilo.d1sb}>Pagado: $ {PedidoData.Pagado}
+              </Text>
+
+            </Box>
+
+            <Box sx={{ width: "10%", p:0 }}>
+              <Button
+                sx={{width : "100%", p:0, bg: "transparent"}}
+                onClick={() => {
+                  setExtend(true)
+                }}
+              >
+                <Image  src={Images.Flechad[0].src} />
+              </Button>
+            </Box>
+          </Flex>
+
+        </Box>
+      </Flex>
+    </div>
+  )
+}
+
+// ----------------------------------
 
 const ModuloSimple  = () => {
 
@@ -128,11 +173,13 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%" }}>
             <Ccard
-              Indica={props.useContext.Indica}
-              Pagar={(e) => props.useAcciones.PagarStripe(e)}
-              token={"pk_test_51HOpsyGJ7Qox7HrulwMiLbcAReD0Q7T3gDWQ69GRiiYsZCuN6hO4X7XzX7L0jo97wRWqPGJhbCcyVlZMc3MwtRsE00rJ8gtEZR"}
+              //Indica={props.useContext.Indica}
+              Indica={""}
 
-              // token={"pk_live_51HOpsyGJ7Qox7Hru2YA4aF3IldU6R7BhKOhtdb0zEf3yy07eOHRNvRjfGPvZd7OBVaSKCIzK4EO7P8jwRxMvnSo600gmaYSDCE"}
+              Pagar={(e) => props.useAcciones.PagarStripe(e)}
+              // Pagar={(e) => {console.log("Pagare")}}
+
+              token={Token}
             />
 
           </Flex> 
@@ -145,15 +192,82 @@ const ModuloSimple  = () => {
 
 // ----------------------------------
 
+
+const ModuloSimplePagado  = () => {
+
+  return (
+    <div>
+      <Flex sx={{ width: "100%" }}>
+        <Box
+          //bg="primary"
+          sx={{
+            fontWeight: "normal",
+            fontSize: 1,
+            color: "text",
+            fontFamily: "body",
+            width: "100%"
+          }}
+        >
+
+          <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
+            <Box sx={{ width: "90%" }}>
+            <Text sx={Estilo.d1sb}>Pagado: $ {PedidoData.Pagado}</Text>
+            </Box>
+
+            <Box sx={{ width: "10%", p:0 }}>
+              <Button
+                sx={{width : "100%", p:0, bg: "transparent"}}
+                onClick={() => {
+                  setExtend(false)
+                }}
+              >
+                <Image  src={Images.Flechau[0].src} />
+              </Button>
+            </Box>
+          </Flex>
+
+
+          <Flex sx={{ width: "100%" }}>
+
+            <Box sx={{ width: "90%" }}>
+              <Text sx={Estilo.d1sb}>Esta orden ya ha sido pagada</Text>
+            </Box>
+
+          </Flex> 
+
+        </Box>
+      </Flex>
+    </div>
+  )
+}
+
+// ----------------------------------
+
+
+
+
+
+
+
+
+
+
   try {
 
     return (
       <Grid sx={{p:0, m: 0, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
+         
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
             {(props.useStatus.pago()===1 & Extend) ? ModuloSimple() : <div/>}
+
             {(props.useStatus.pago()===1 & !Extend) ? ModuloSlim() : <div/>}
+
+            {(props.useStatus.pago()===2 & Extend) ? ModuloSimplePagado() : <div/>}
+            {(props.useStatus.pago()===2 & !Extend) ? ModuloSlimPagado() : <div/>}
+
+
 
           </div>
         }

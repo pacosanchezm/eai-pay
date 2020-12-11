@@ -32,11 +32,8 @@ const ContextProvider = ({ children }) => {
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.Registros
-
   const [Registros, setRegistros] = props.useContext.Registros
-
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
-  // const Images = props.useContext.Images
 
 // -----------------------------------------------------------------------------
 
@@ -130,11 +127,8 @@ const Listado = props => {
 
           </Grid>
 
-
         </Flex>
       </Grid>
-
-
 
     </div>
   );

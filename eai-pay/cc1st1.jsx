@@ -23,27 +23,6 @@ let CardImages = {
 // ---------------------------------------
 
 
-const createOptions = (fontSize, padding) => {
-  return {
-    style: {
-      base: {
-        fontSize: fontSize,
-        color: "#424770",
-        letterSpacing: "0.025em",
-        fontFamily: "Source Code Pro, monospace",
-        "::placeholder": {
-          color: "#aab7c4",
-          fontFamily: "Arial, Helvetica, sans-serif"
-        },
-        border: "5px solid red",
-        padding
-      },
-      invalid: {
-        color: "#9e2146"
-      }
-    }
-  };
-};
 
 
 
@@ -93,6 +72,22 @@ const Body = props => {
 
   // -----------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const SplitForm = props => {
     const [PayStatus, setPayStatus] = useContext(StateContext).PayStatus
 
@@ -112,6 +107,49 @@ const Body = props => {
       return CardImages.no.src
     }
 
+
+
+
+const createOptions = (fontSize, padding) => {
+  return {
+    style: {
+      base: {
+        fontSize: fontSize,
+        color: "#424770",
+        letterSpacing: "0.025em",
+        fontFamily: "Source Code Pro, monospace",
+        "::placeholder": {
+          color: "#aab7c4",
+          fontFamily: "Arial, Helvetica, sans-serif"
+        },
+        border: "5px solid red",
+        padding
+      },
+      invalid: {
+        color: "#9e2146"
+      }
+    }
+  };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       const ColorBoton = function(props) {
 
         if(PayStatus.Status==="Rechazado") { return PayStatus.Color}
@@ -126,8 +164,6 @@ const Body = props => {
         ev.preventDefault()
         let Pago
 
-
-
         if (props.stripe) {
           setPagando(true)
 
@@ -138,15 +174,12 @@ const Body = props => {
           // ------ Test
           //let Token = { token: { id: "TT0Ken", client_ip: "299.300" } }
 
-
            if (Token.token) {
               Pago = await Pagar(Token)
 
             } else {Pago = 0}
 
             if(Pago===0) {setPayStatus({ Status: "Rechazado", Color: "DarkOrange" })}
-
-
 
           console.log({pago: Pago})
           setPagando(false)
@@ -155,6 +188,32 @@ const Body = props => {
 
 
       // -------------------------
+
+      // const handleSubmit = async ev => {
+      //   ev.preventDefault()
+      //   let Pago
+
+      //   let Token = token
+
+      //   console.log({Token})
+
+      // }
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     try {
 

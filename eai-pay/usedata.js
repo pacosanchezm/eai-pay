@@ -3,8 +3,8 @@ import axios from "axios"
 
 // ------------------------------------------------------------------
 
-let graphqlserver = "https://8t8jt.sse.codesandbox.io/gql"
-// let graphqlserver = "https://smxai.net/graphqleai2"
+// let graphqlserver = "https://8t8jt.sse.codesandbox.io/gql"
+ let graphqlserver = "https://smxai.net/graphqleai2"
 
 
 let usedata = function(StateContextM) {
@@ -153,26 +153,6 @@ let usedata = function(StateContextM) {
     },
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     Location: function() {
       return {
         insert : async function(e) {
@@ -212,6 +192,84 @@ let usedata = function(StateContextM) {
 
       };
     }, // ------- Location
+
+
+
+
+
+
+    Pagos: function() {
+      return {
+
+
+
+        Stripe3: async (e) => {
+         // console.log("PayStripe: " + JSON.stringify(token));
+    
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+              mutation PagoToken ($PayIntent: StripePaymentIntent) {
+                PagosM  {
+                  Registro {
+                    Pagar (Query: $PayIntent)
+                  }
+                }
+              }
+            `,
+              variables: {
+                PayIntent: {
+                  Id: Number(e.Pedido),
+                  Cart: e.Sucursal,
+                  Token: 1234,
+                  SToken: e.Token.token.id,
+                  Amount: Number(e.Monto) * 100,
+                  Descripcion: "Pedido Suc " + e.Sucursal + " # " + e.Pedido,
+                  Ip: e.Token.token.client_ip,
+                  Servicio: Number(e.Servicio),
+                  Obv: e.Obv
+                }
+              }
+            }
+          });
+    
+          console.log(axdata.data);
+          if (axdata.data.data.PagosM.Registro.Pagar === 1) {
+            // setPayStatus({ Status: "Pagado", Color: "green" });
+            return 1;
+          } else {
+           // setPayStatus({ Status: "Pago No Procesado", Color: "red" });
+            return 0;
+          }
+        },
+
+
+
+
+
+
+
+
+
+
+
+      };
+    }, // ------- Pagos
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

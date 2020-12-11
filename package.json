@@ -17,6 +17,7 @@
     "react-scripts": "3.4.3",
     "react-select": "3.1.0",
     "react-stripe-elements": "6.1.2",
+    "react-tooltip": "4.2.10",
     "theme-ui": "0.3.1"
   },
   "devDependencies": {
